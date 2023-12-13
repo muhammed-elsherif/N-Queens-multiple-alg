@@ -3,6 +3,9 @@ from tkinter import ttk
 import random
 import heapq
 
+canvas_width = 500
+canvas_height = 500
+
 class Node:
     def __init__(self, state, parent=None):
         self.state = state
@@ -57,7 +60,8 @@ def solve_n_queens(n):
     return None
 
 def display_chessboard(board, n):
-    cell_size = 35
+    cell_size = min(canvas_width // n, canvas_height // n)
+    
     canvas.delete("all")
 
     for i in range(n):
@@ -90,7 +94,7 @@ entry.pack()
 button = tk.Button(root, text='Solve', command=on_button_click)
 button.pack()
 
-canvas = tk.Canvas(root, width=500, height=500)
+canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
 style = ttk.Style()

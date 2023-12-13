@@ -2,6 +2,9 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 
+canvas_width = 500
+canvas_height = 500
+
 def is_safe(board, row, col, n):
     for i in range(row):
         if board[i][col] == 1:
@@ -48,7 +51,8 @@ def solve_n_queens(n):
     return True
 
 def display_chessboard(board, n):
-    cell_size = 35 
+    cell_size = min(canvas_width // n, canvas_height // n) 
+
     canvas.delete("all")  
 
     for i in range(n):
@@ -77,7 +81,7 @@ entry.pack()
 button = tk.Button(root, text='Solve', command=on_button_click)
 button.pack()
 
-canvas = tk.Canvas(root, width=500, height=500)
+canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
 style = ttk.Style()

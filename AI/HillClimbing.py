@@ -1,6 +1,10 @@
 import random
+from tkinter import *
 import tkinter as tk
 from tkinter import ttk
+
+canvas_width = 500
+canvas_height = 500
 
 def generate_random_neighbour(current_state):
     neighbour = current_state[:]
@@ -37,14 +41,15 @@ def solve_n_queens(n):
     display_chessboard([[1 if i == col else 0 for col in sol] for i in range(n)], n)
 
 def display_chessboard(board, n):
-    cell_size = 35
+    cell_size = min(canvas_width // n, canvas_height // n)
+    
     canvas.delete("all")
 
     for i in range(n):
         for j in range(n):
             x1, y1 = j * cell_size, i * cell_size
             x2, y2 = (j + 1) * cell_size, (i + 1) * cell_size
-            color = "white" if (i + j) % 2 == 0 else "red"
+            color = "white" if (i + j) % 2 == 0 else "brown"
             canvas.create_rectangle(x1, y1, x2, y2, fill=color)
 
             if board[i][j] == 1:
@@ -52,8 +57,9 @@ def display_chessboard(board, n):
 
 def on_button_click():
     n = int(entry.get())
-    # board = 
     solve_n_queens(n)
+
+    # board = 
     # if board:
     #     display_chessboard(board, n)
     # else:
@@ -64,13 +70,14 @@ root.title("N-Queens Solver(HillClimbingAlg)")
 
 label = tk.Label(root, text="Enter the number of Queens(N x N): ")
 label.pack()
+
 entry = tk.Entry(root)
 entry.pack()
 
-button = tk.Button(root, text="Solve", command=on_button_click)
+button = ttk.Button(root, text="Solve", command=on_button_click)
 button.pack()
 
-canvas = tk.Canvas(root, width=500, height=500)
+canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
 style = ttk.Style()

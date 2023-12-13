@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 def on_alg_button_click(algorithm):
     # Open the algorithm page based on the selected algorithm
     if algorithm == "Genetic Algorithm":
@@ -28,7 +27,6 @@ def open_hill_climbing_algorithm_page():
 def open_backtracking_algorithm_page():
     root.destroy()
     import Backtracking
-
 
 root = tk.Tk()
 root.title("N-Queens Solver")

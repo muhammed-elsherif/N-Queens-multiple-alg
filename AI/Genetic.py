@@ -3,6 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 import random
 
+canvas_width = 500
+canvas_height = 500
+
 def generate_population(population_size, board_size):
     population = []
     for _ in range(population_size):
@@ -53,7 +56,8 @@ def genetic_algorithm(board_size, population_size, generations, mutation_rate):
 
 def display_chessboard(board):
     n = len(board)
-    cell_size = 35
+    cell_size = min(canvas_width // n, canvas_height // n)
+    
     canvas.delete("all")
 
     for i in range(n):
@@ -77,7 +81,6 @@ def on_button_click():
 root = Tk()
 root.title("N-Queens Solver(GeneticAlg)")
 
-
 label = tk.Label(root, text="Enter the number of Queens(N x N): ")
 label.pack()
 
@@ -87,7 +90,7 @@ entry.pack()
 button = ttk.Button(root, text='Solve', command=on_button_click)
 button.pack()
 
-canvas = Canvas(root, width=500, height=500)
+canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
 canvas.pack()
 
 style = ttk.Style()
