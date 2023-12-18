@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 import random
+from tkinter.messagebox import showerror
 
 canvas_width = 600
 canvas_height = 600
@@ -72,6 +73,8 @@ def display_chessboard(board):
 
 def on_solve_button_click():
     n = int(entry.get())
+    if n<3:
+        showerror('Error', 'Please enter a valid number more than 3')
     solution = genetic_algorithm(n, 100, 1000, 0.1)
     if solution:
         display_chessboard(solution)

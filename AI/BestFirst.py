@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import random
 import heapq
+from tkinter.messagebox import showerror
 
 canvas_width = 600
 canvas_height = 600
@@ -76,6 +77,8 @@ def display_chessboard(board, n):
 
 def on_solve_button_click():
     n = int(entry.get())
+    if n<3:
+        showerror('Error', 'Please enter a valid number more than 3')
     board = solve_n_queens(n)
     if board:
         display_chessboard(board, n)

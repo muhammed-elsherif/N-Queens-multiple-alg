@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showerror
 
 canvas_width = 600
 canvas_height = 600
@@ -66,7 +67,9 @@ def display_chessboard(board, n):
                 canvas.create_text(x1 + cell_size // 2, y1 + cell_size // 2, text="♕", font=("Arial", cell_size // 2))
 
 def on_solve_button_click():
-    n = int(entry.get())  
+    n = int(entry.get())
+    if n<3:
+        showerror('Error', 'Please enter a valid number more than 3')
     solve_n_queens(n)
 
 def on_back_button_click():

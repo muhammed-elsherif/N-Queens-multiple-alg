@@ -2,6 +2,7 @@ import random
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showerror
 
 canvas_width = 600
 canvas_height = 600
@@ -61,6 +62,8 @@ def on_back_button_click():
 
 def on_solve_button_click():
     n = int(entry.get())
+    if n<3:
+        showerror('Error', 'Please enter a valid number more than 3')
     solve_n_queens(n)
 
     # board = 
