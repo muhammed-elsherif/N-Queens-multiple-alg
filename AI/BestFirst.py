@@ -74,13 +74,17 @@ def display_chessboard(board, n):
             if board[i] == j:
                 canvas.create_text(x1 + cell_size // 2, y1 + cell_size // 2, text="♕", font=("Arial", cell_size // 2))
 
-def on_button_click():
+def on_solve_button_click():
     n = int(entry.get())
     board = solve_n_queens(n)
     if board:
         display_chessboard(board, n)
     else:
         print(f"No solution exists for {n}-Queens problem.")
+
+def on_back_button_click():
+    root.destroy()
+    import Home
 
 root = tk.Tk()
 root.title("N-Queens Solver(BestFirstAlg)")
@@ -91,7 +95,10 @@ label.pack()
 entry = tk.Entry(root)
 entry.pack()
 
-button = tk.Button(root, text='Solve', command=on_button_click)
+button = tk.Button(root, text='Solve', command=on_solve_button_click)
+button.pack()
+
+button = ttk.Button(root, text="Back", command=on_back_button_click)
 button.pack()
 
 canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)

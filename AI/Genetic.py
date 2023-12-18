@@ -70,13 +70,17 @@ def display_chessboard(board):
             if board[i] == j:
                 canvas.create_text(x1 + cell_size // 2, y1 + cell_size // 2, text="♕", font=("Arial", cell_size // 2))
 
-def on_button_click():
+def on_solve_button_click():
     n = int(entry.get())
     solution = genetic_algorithm(n, 100, 1000, 0.1)
     if solution:
         display_chessboard(solution)
     else:
         print(f"No solution exists for {n}-Queens problem.")
+
+def on_back_button_click():
+    root.destroy()
+    import Home
 
 root = Tk()
 root.title("N-Queens Solver(GeneticAlg)")
@@ -87,7 +91,10 @@ label.pack()
 entry = Entry(root)
 entry.pack()
 
-button = ttk.Button(root, text='Solve', command=on_button_click)
+button = ttk.Button(root, text='Solve', command=on_solve_button_click)
+button.pack()
+
+button = ttk.Button(root, text="Back", command=on_back_button_click)
 button.pack()
 
 canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)

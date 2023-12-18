@@ -55,7 +55,11 @@ def display_chessboard(board, n):
             if board[i][j] == 1:
                 canvas.create_text(x1 + cell_size // 2, y1 + cell_size // 2, text="♕", font=("Arial", cell_size // 2))
 
-def on_button_click():
+def on_back_button_click():
+    root.destroy()
+    import Home
+
+def on_solve_button_click():
     n = int(entry.get())
     solve_n_queens(n)
 
@@ -74,7 +78,10 @@ label.pack()
 entry = tk.Entry(root)
 entry.pack()
 
-button = ttk.Button(root, text="Solve", command=on_button_click)
+button = ttk.Button(root, text="Solve", command=on_solve_button_click)
+button.pack()
+
+button = ttk.Button(root, text="Back", command=on_back_button_click)
 button.pack()
 
 canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
