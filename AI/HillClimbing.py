@@ -3,8 +3,8 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 
-canvas_width = 500
-canvas_height = 500
+canvas_width = 600
+canvas_height = 600
 
 def generate_random_neighbour(current_state):
     neighbour = current_state[:]
@@ -72,14 +72,14 @@ def on_solve_button_click():
 root = tk.Tk()
 root.title("N-Queens Solver(HillClimbingAlg)")
 
-label = tk.Label(root, text="Enter the number of Queens(N x N): ")
-label.pack()
+label = ttk.Label(root, text="Enter the number of Queens(N x N): ", font=("Arial", 16))
+label.pack(pady=10, padx=10)
 
-entry = tk.Entry(root)
+entry = ttk.Entry(root, font=("Arial", 16))
 entry.pack()
 
 button = ttk.Button(root, text="Solve", command=on_solve_button_click)
-button.pack()
+button.pack(pady=10)
 
 button = ttk.Button(root, text="Back", command=on_back_button_click)
 button.pack()

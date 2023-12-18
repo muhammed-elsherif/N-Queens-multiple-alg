@@ -3,8 +3,8 @@ from tkinter import ttk
 import random
 import heapq
 
-canvas_width = 500
-canvas_height = 500
+canvas_width = 600
+canvas_height = 600
 
 class Node:
     def __init__(self, state, parent=None):
@@ -89,14 +89,14 @@ def on_back_button_click():
 root = tk.Tk()
 root.title("N-Queens Solver(BestFirstAlg)")
 
-label = tk.Label(root, text="Enter the number of Queens(N x N): ")
-label.pack()
+label = ttk.Label(root, text="Enter the number of Queens(N x N): ", font=("Arial", 16))
+label.pack(pady=10, padx=10)
 
-entry = tk.Entry(root)
+entry = ttk.Entry(root, font=("Arial", 16))
 entry.pack()
 
-button = tk.Button(root, text='Solve', command=on_solve_button_click)
-button.pack()
+button = ttk.Button(root, text="Solve", command=on_solve_button_click)
+button.pack(pady=10)
 
 button = ttk.Button(root, text="Back", command=on_back_button_click)
 button.pack()
