@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -6,6 +7,7 @@ from tkinter.messagebox import showerror
 
 canvas_width = 600
 canvas_height = 600
+allTimes = []
 
 def generate_population(population_size, board_size):
     population = []
@@ -65,7 +67,7 @@ def display_chessboard(board):
         for j in range(n):
             x1, y1 = j * cell_size, i * cell_size
             x2, y2 = (j + 1) * cell_size, (i + 1) * cell_size
-            color = "white" if (i + j) % 2 == 0 else "brown"
+            color = "grey" if (i + j) % 2 == 0 else "brown"
             canvas.create_rectangle(x1, y1, x2, y2, fill=color)
 
             if board[i] == j:
@@ -75,7 +77,15 @@ def on_solve_button_click():
     n = int(entry.get())
     if n<3:
         showerror('Error', 'Please enter a valid number more than 3')
+    start = time.time()
     solution = genetic_algorithm(n, 100, 1000, 0.1)
+    end = time.time()
+
+    allTimes.append(end - start)
+    average = sum(allTimes) / len(allTimes)
+
+    print(f"Time taken: {end - start} seconds")
+    print(f"Average time taken: {average} seconds")
     if solution:
         display_chessboard(solution)
     else:

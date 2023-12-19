@@ -3,9 +3,11 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showerror
+import time
 
 canvas_width = 600
 canvas_height = 600
+allTimes = []
 
 def generate_random_neighbour(current_state):
     neighbour = current_state[:]
@@ -50,7 +52,7 @@ def display_chessboard(board, n):
         for j in range(n):
             x1, y1 = j * cell_size, i * cell_size
             x2, y2 = (j + 1) * cell_size, (i + 1) * cell_size
-            color = "white" if (i + j) % 2 == 0 else "brown"
+            color = "grey" if (i + j) % 2 == 0 else "brown"
             canvas.create_rectangle(x1, y1, x2, y2, fill=color)
 
             if board[i][j] == 1:
@@ -64,13 +66,16 @@ def on_solve_button_click():
     n = int(entry.get())
     if n<3:
         showerror('Error', 'Please enter a valid number more than 3')
+    start = time.time()
     solve_n_queens(n)
+    end = time.time()
 
-    # board = 
-    # if board:
-    #     display_chessboard(board, n)
-    # else:
-    #     print(f"No solution exists for {n}-Queens problem.")
+    allTimes.append(end - start)
+    average = sum(allTimes) / len(allTimes)
+
+    print(f"Time taken: {end - start} seconds")
+    print(f"Average time taken: {average} seconds")
+    
 
 root = tk.Tk()
 root.title("N-Queens Solver(HillClimbingAlg)")
