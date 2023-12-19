@@ -1,7 +1,8 @@
 import time
 from tkinter import *
-import tkinter as tk
 from tkinter import ttk
+import tkinter as tk
+import numpy as np
 import random
 from tkinter.messagebox import showerror
 
@@ -9,53 +10,83 @@ canvas_width = 600
 canvas_height = 600
 allTimes = []
 
-def generate_population(population_size, board_size):
-    population = []
-    for _ in range(population_size):
-        chromosome = [random.randint(0, board_size - 1) for _ in range(board_size)]
-        population.append(chromosome)
-    return population
+def init_pop(pop_size , n = 8):
+    return np.random.randint(n, size=(pop_size , n))
 
-def fitness(chromosome):
-    conflicts = 0
-    n = len(chromosome)
-    for i in range(n):
-        for j in range(i + 1, n):
-            if chromosome[i] == chromosome[j] or abs(i - j) == abs(chromosome[i] - chromosome[j]):
-                conflicts += 1
-    return conflicts
+def calc_fitness(population , n=8):
+    fitness_val = []
+    for x in population:
+        pentaly = 0 
+        for i in range(n):
+            r =x[i]
+            for j in range(n):
+                if i==j:
+                    continue
+                d = abs(i-j)
+                if x[j] in [r , r-d ,r+d]:
+                    pentaly+=1
+        fitness_val.append(pentaly)
+    return -1 * np.array(fitness_val)
 
-def crossover(parent1, parent2):
-    n = len(parent1)
-    crossover_point = random.randint(0, n - 1)
-    child = parent1[:crossover_point] + parent2[crossover_point:]
-    return child
+def selection(population , fitness_vals):
+    probs = fitness_vals.copy()
+    probs += abs(probs.min()) +1 
+    probs = probs = probs/probs.sum()
+    N = len(population)
+    indices = np.arange(N)
+    selected_indices = np.random.choice(indices , size =N , p=probs)
+    selected_population = population[selected_indices]
+    return selected_population
 
-def mutate(chromosome, mutation_rate):
-    for i in range(len(chromosome)):
-        if random.random() < mutation_rate:
-            chromosome[i] = random.randint(0, len(chromosome) - 1)
-    return chromosome
+def cross_over(parent1 , parent2 , pc, n =8):
+    r = np.random.random()
+    if r < pc:
+        m = np.random.randint(1 ,n)
+        child1 = np.concatenate([parent1[:m],  parent2[m:]])
+        child2 = np.concatenate([parent2[:m],  parent1[m:]])
+    else:
+        child1  = parent1.copy()
+        child2 = parent2.copy()
+    return child1, child2
 
-def genetic_algorithm(board_size, population_size, generations, mutation_rate):
-    population = generate_population(population_size, board_size)
-    for generation in range(generations):
-        population = sorted(population, key=lambda x: fitness(x))
-        if fitness(population[0]) == 0:
-            print("Solution found in generation", generation)
-            return population[0]
-        new_population = []
-        for _ in range(population_size // 2):
-            parent1 = population[random.randint(0, population_size // 2 - 1)]
-            parent2 = population[random.randint(0, population_size // 2 - 1)]
-            child1 = crossover(parent1, parent2)
-            child2 = crossover(parent2, parent1)
-            child1 = mutate(child1, mutation_rate)
-            child2 = mutate(child2, mutation_rate)
-            new_population.extend([child1, child2])
-        population = new_population
+def mutation(individual , pm , n=8):
+    r = np.random.random()
+    if r < pm:
+        m = np.random.randint(n)
+        individual[m] = np.random.randint(n)
+        return individual
 
-    return None
+def crossover_mutation(selected_pop , pc, pm , n=8):
+    N = len(selected_pop)
+    new_pop = np.empty((N,n) , dtype=int)
+    for i in range(0, N ,2):
+        parent1 = selected_pop[i]
+        parent2 = selected_pop[i+1]
+        child1 , child2 = cross_over(parent1, parent2, pc)
+        new_pop[i] = child1 
+        new_pop[i+1] = child2
+    for i in range(N):
+        mutation(new_pop[i], pm , n)
+    return new_pop
+        
+def N_Queens(N , pop_size , max_generations , pc=0.70 , pm=0.01):
+    population = init_pop(pop_size , N)
+    best_fitness_overall = None
+    for i_gen in range(max_generations):
+        fitness_vals = calc_fitness(population , N)
+        best_i = fitness_vals.argmax()
+        best_fitness = fitness_vals[best_i]
+        if best_fitness_overall is None or best_fitness > best_fitness_overall:
+            best_fitness_overall = best_fitness
+            best_solution = population[best_i].tolist()
+        print(f'\ri_gen = {i_gen:06}  -f{-best_fitness_overall:03}'  , end='')
+        if best_fitness == 0:
+            print('\n Found optimal solution')
+            break
+        selected_pop = selection(population , fitness_vals)
+        population = crossover_mutation(selected_pop, pc, pm, N)
+    print()
+    return best_solution
 
 def display_chessboard(board):
     n = len(board)
@@ -77,8 +108,11 @@ def on_solve_button_click():
     n = int(entry.get())
     if n<3:
         showerror('Error', 'Please enter a valid number more than 3')
+
     start = time.time()
-    solution = genetic_algorithm(n, 100, 1000, 0.1)
+    solution = N_Queens(n, pop_size=100, max_generations=10000, pc=0.70, pm=0.3)
+    print(solution)
+    # solution = genetic_algorithm(n, 100, 1000, 0.1)
     end = time.time()
 
     allTimes.append(end - start)
