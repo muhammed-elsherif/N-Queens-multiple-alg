@@ -18,7 +18,7 @@ class Node:
     def __lt__(self, other):
         return self.cost < other.cost
 
-def is_safe(state, row, col, n):
+def is_safe(state, row, col):
     for i in range(row):
         if state[i] == col or \
            state[i] - i == col - row or \
@@ -26,7 +26,7 @@ def is_safe(state, row, col, n):
             return False
     return True
 
-def heuristic(state, row, col, n):
+def heuristic(state, row, col):
     attacks = 0
     for i in range(row):
         if state[i]     == col or \
@@ -36,6 +36,7 @@ def heuristic(state, row, col, n):
     return attacks
 
 def solve_n_queens(n):
+    # [2, -1, -1 , -1]
     start_state = [-1] * n
     start_node = Node(start_state)
     start_node.cost = 0
@@ -53,11 +54,11 @@ def solve_n_queens(n):
         random.shuffle(cols)
         
         for col in cols:
-            if is_safe(current_node.state, row, col, n):
+            if is_safe(current_node.state, row, col):
                 child_state = current_node.state.copy()
                 child_state[row] = col
                 child_node = Node(child_state, current_node)
-                child_node.cost = heuristic(child_state, row, col, n)
+                child_node.cost = heuristic(child_state, row, col)
                 heapq.heappush(open_set, child_node)
 
     return None
