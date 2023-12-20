@@ -1,3 +1,4 @@
+import random
 import time
 from tkinter import *
 import tkinter as tk
@@ -27,7 +28,7 @@ def solve_n_queens_util(board, row, n):
     if row == n:
         return True
 
-    for col in range(n):
+    for col in random.sample(range(n), n):
         if is_safe(board, row, col, n):
             board[row][col] = 1
 
@@ -45,11 +46,11 @@ def solve_n_queens(n):
         print(f"No solution exists for {n}-Queens problem.")
         return False
 
-    print(f"Solution for {n}-Queens problem:")
+    print(f"Randomized solution for {n}-Queens problem:")
     for i in range(n):
         print(" ".join(str(x) for x in board[i]))
-    
-    display_chessboard(board, n)  
+
+    display_chessboard(board, n)
     
     return True
 
@@ -72,6 +73,8 @@ def on_solve_button_click():
     n = int(entry.get())
     if n<3:
         showerror('Error', 'Please enter a valid number more than 3')
+
+    board = [[0 for _ in range(n)] for _ in range(n)]
 
     start = time.time()
     solve_n_queens(n)
