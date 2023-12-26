@@ -5,8 +5,6 @@ import random
 import heapq
 from tkinter.messagebox import showerror
 
-canvas_width = 600
-canvas_height = 600
 allTimes = []
 
 class Node:
@@ -62,64 +60,3 @@ def solve_n_queens(n):
                 heapq.heappush(open_set, child_node)
 
     return None
-
-def display_chessboard(board, n):
-    cell_size = min(canvas_width // n, canvas_height // n)
-    
-    canvas.delete("all")
-
-    for i in range(n):
-        for j in range(n):
-            x1, y1 = j * cell_size, i * cell_size
-            x2, y2 = (j + 1) * cell_size, (i + 1) * cell_size
-            color = "grey" if (i + j) % 2 == 0 else "brown"
-            canvas.create_rectangle(x1, y1, x2, y2, fill=color)
-
-            if board[i] == j:
-                canvas.create_text(x1 + cell_size // 2, y1 + cell_size // 2, text="♕", font=("Arial", cell_size // 2))
-
-def on_solve_button_click():
-    n = int(entry.get())
-    if n<3:
-        showerror('Error', 'Please enter a valid number more than 3')
-    start = time.time()
-    board = solve_n_queens(n)
-    end = time.time()
-
-    allTimes.append(end - start)
-    average = sum(allTimes) / len(allTimes)
-
-    print(f"Time taken: {end - start} seconds")
-    print(f"Average time taken: {average} seconds")
-
-    if board:
-        display_chessboard(board, n)
-    else:
-        print(f"No solution exists for {n}-Queens problem.")
-
-def on_back_button_click():
-    root.destroy()
-    import Home
-
-root = tk.Tk()
-root.title("N-Queens Solver(BestFirstAlg)")
-
-label = ttk.Label(root, text="Enter the number of Queens(N x N): ", font=("Arial", 16))
-label.pack(pady=10, padx=10)
-
-entry = ttk.Entry(root, font=("Arial", 16))
-entry.pack()
-
-button = ttk.Button(root, text="Solve", command=on_solve_button_click)
-button.pack(pady=10)
-
-button = ttk.Button(root, text="Back", command=on_back_button_click)
-button.pack()
-
-canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
-canvas.pack()
-
-style = ttk.Style()
-style.theme_use('clam')
-
-root.mainloop()
