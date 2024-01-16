@@ -35,11 +35,15 @@ def solve_n_queens_util(board, row, n):
 
 def solve_n_queens(n):
     board = [[0 for _ in range(n)] for _ in range(n)]
+    best_solution = []
     if not solve_n_queens_util(board, 0, n):
         print(f"No solution exists for {n}-Queens problem.")
         return False
 
     print(f"Randomized solution for {n}-Queens problem:")
-    for i in range(n):
+    for i in range(n):   
         print(" ".join(str(x) for x in board[i]))
-    return board
+        for j in range(n):
+            if board[i][j] == 1:
+                best_solution.append(j)
+    return best_solution
